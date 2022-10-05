@@ -25,28 +25,23 @@ of the game.)
 You can get some inspiration for possible test cases here: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns
 '''
 
-'''
-Class Cell
+class Cell:
+    def __init__(self):
+        self.alive = False
+        self.x = 0
+        self.y = 0
 
-parameter: alive (boolean)
-x coordinate
-y coordinate
+class Grid:
+    def __init__(self, gridSize, initialLiveCells):
+        self.x = gridSize
+        self.y = gridSize
 
-Class Grid
+class GamePlayer:
+    def __init__(self, gridSize, initialLiveCells, steps):
+        self.grid = Grid(gridSize)
+        self.initialLiveCells = initialLiveCells
+        self.steps = steps
+        self.currentLiveCells = []
 
-parameter: x width
-parameter: y height
-
-Class GamePlayer
-
-input argument: size of grid 
-input argument: list of coordinates (list of tuples)
-input argument: number of steps the game should run for
-output: list of live cells
-
-function: insert user's coordinates as list into grid
-for each cell:
-    check cells around it
-    if cell's x or y = current cell's x or y +- 1, cell is adjacent
-    if 2 cells are alive
-'''
+    def playGame(self):
+        return self.currentLiveCells
