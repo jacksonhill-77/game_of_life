@@ -37,11 +37,14 @@ class Grid:
     def __init__(self, gridSize, initialLiveCells):
         self.gridSize = gridSize
         self.grid = []
+        self.initialLiveCells = initialLiveCells
 
         for x in range(gridSize):
             cellList = []
             for y in range(gridSize):
                 cell = Cell(x, y)
+                if (x,y) in initialLiveCells:
+                    cell.alive = True
                 cellList.append(cell)
             self.grid.append(cellList)
 
@@ -63,7 +66,7 @@ class GamePlayer:
     def playGame(self):
         for line in self.grid.grid:
             for cell in line:
-                print(cell.x,cell.y)
+                print(cell.x,cell.y, cell.alive)
         return self.currentLiveCells
 
 userInput = [(0,1),(2,4),(6,5),(6,6),(9,2)]
