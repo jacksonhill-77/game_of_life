@@ -34,39 +34,69 @@ class Cell:
 
 class Grid:
 
-    def __init__(self, gridSize, initialLiveCells):
+    def __init__(self, gridSize, initialAliveCells):
         self.gridSize = gridSize
         self.grid = []
-        self.initialLiveCells = initialLiveCells
+        self.initialAliveCells = initialAliveCells
 
         for x in range(gridSize):
             cellList = []
             for y in range(gridSize):
                 cell = Cell(x, y)
-                if (x,y) in initialLiveCells:
+                if (x,y) in initialAliveCells:
                     cell.alive = True
                 cellList.append(cell)
             self.grid.append(cellList)
 
 class GamePlayer:
 
-    def __init__(self, gridSize, initialLiveCells, steps):
-        self.grid = Grid(gridSize, initialLiveCells)
-        self.initialLiveCells = initialLiveCells
-        self.steps = steps
+    def __init__(self, gridSize, initialAliveCells, maxSteps):
+        self.gridSize = gridSize
+        self.grid = Grid(gridSize, initialAliveCells)
+        self.initialAliveCells = initialAliveCells
+        self.maxSteps = maxSteps
         self.currentLiveCells = []
 
-    def checkAdjacentCellStatus(self):
-        for cell in self.grid.cells:
-            adjacentLiveCells = []
-            # for gridCell in self.grid:
-            #     if gridCell.x == cell.x:
-            #     gridCell.x == cell.x - 1 or gridCell.x == cell.x + 1:
+    def determineCellStatus(self, cell, aliveCells):
+        if 2 < len(aliveCells) <= 3:
+            cell.alive = True
+        else: cell.alive = False
+
+    def updateCellStatus(self, cell):
+        print("Cell:",cell.x,cell.y,cell.alive)
+        grid = self.grid.grid
+        x = cell.x
+        y = cell.y
+        if x == self.gridSize or y == self.gridSize:
+            return
+        print("Checking cells around cell",x,y)
+        # Instead of looping over every row and then every cell in that row, 
+        # this method below was used to directly access cells
+        print(grid[x-1][y+1])
+        cellsToCheck = (grid[x-1][y+1],grid[x][y+1],grid[x+1][y+1],grid[x-1][y],grid[x+1][y],grid[x-1][y-1],grid[x][y-1],grid[x+1][y-1]) 
+        aliveCells = []
+        for adjacentCell in cellsToCheck:
+            if adjacentCell.alive == True:
+                aliveCells.append(adjacentCell)
+        print(aliveCells)
+        self.determineCellStatus(cell, aliveCells)
+
+    def simulateStep(self):
+        for row in self.grid.grid:
+            for cell in row:
+                self.updateCellStatus(cell)
+
 
     def playGame(self):
-        for line in self.grid.grid:
-            for cell in line:
-                print(cell.x,cell.y, cell.alive)
+        step = 0
+        while step < self.maxSteps:
+            self.simulateStep()
+            for line in self.grid.grid:
+                for cell in line:
+                    print(cell.x,cell.y, cell.alive)
+        # for line in self.grid.grid:
+        #     for cell in line:
+        #         print(cell.x,cell.y, cell.alive)
         return self.currentLiveCells
 
 userInput = [(0,1),(2,4),(6,5),(6,6),(9,2)]
