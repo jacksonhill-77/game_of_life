@@ -26,22 +26,46 @@ You can get some inspiration for possible test cases here: https://en.wikipedia.
 '''
 
 class Cell:
-    def __init__(self):
+
+    def __init__(self, x, y):
         self.alive = False
-        self.x = 0
-        self.y = 0
+        self.x = x
+        self.y = y
 
 class Grid:
+
     def __init__(self, gridSize, initialLiveCells):
-        self.x = gridSize
-        self.y = gridSize
+        self.gridSize = gridSize
+        self.grid = []
+
+        for x in range(gridSize):
+            cellList = []
+            for y in range(gridSize):
+                cell = Cell(x, y)
+                cellList.append(cell)
+            self.grid.append(cellList)
 
 class GamePlayer:
+
     def __init__(self, gridSize, initialLiveCells, steps):
-        self.grid = Grid(gridSize)
+        self.grid = Grid(gridSize, initialLiveCells)
         self.initialLiveCells = initialLiveCells
         self.steps = steps
         self.currentLiveCells = []
 
+    def checkAdjacentCellStatus(self):
+        for cell in self.grid.cells:
+            adjacentLiveCells = []
+            # for gridCell in self.grid:
+            #     if gridCell.x == cell.x:
+            #     gridCell.x == cell.x - 1 or gridCell.x == cell.x + 1:
+
     def playGame(self):
+        for line in self.grid.grid:
+            for cell in line:
+                print(cell.x,cell.y)
         return self.currentLiveCells
+
+userInput = [(0,1),(2,4),(6,5),(6,6),(9,2)]
+game = GamePlayer(10,userInput, 10)
+game.playGame()
