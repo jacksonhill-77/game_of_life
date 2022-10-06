@@ -62,23 +62,41 @@ class GamePlayer:
             cell.alive = True
         else: cell.alive = False
 
-    def updateCellStatus(self, cell):
-        print("Cell:",cell.x,cell.y,cell.alive)
+    def returnAdjacentCellsAsList(self, cell):
         grid = self.grid.grid
+        max = self.gridSize - 1
         x = cell.x
         y = cell.y
-        if x == self.gridSize or y == self.gridSize:
-            return
-        print("Checking cells around cell",x,y)
-        # Instead of looping over every row and then every cell in that row, 
-        # this method below was used to directly access cells
-        print(grid[x-1][y+1])
-        cellsToCheck = (grid[x-1][y+1],grid[x][y+1],grid[x+1][y+1],grid[x-1][y],grid[x+1][y],grid[x-1][y-1],grid[x][y-1],grid[x+1][y-1]) 
+        adjacentCells = []
+        print("Cell x y:",x,y)
+        if x > 0 and y > 0:
+            adjacentCells.append(grid[x-1][y-1]) 
+        if x > 0:
+            adjacentCells.append(grid[x][y-1]) 
+        if x < max and y > 0:
+            adjacentCells.append(grid[x+1][y-1]) 
+        if x > 0:
+            adjacentCells.append(grid[x-1][y]) 
+        if x < max:
+            adjacentCells.append(grid[x+1][y]) 
+        if x > 0 and y < max:
+            adjacentCells.append(grid[x-1][y+1]) 
+        if y < max:
+            adjacentCells.append(grid[x][y+1]) 
+        if x < max and y < max:
+            adjacentCells.append(grid[x+1][y+1]) 
+        print("Adjacent cells:")
+        for cell in adjacentCells:
+            print(cell.x,cell.y)
+        return adjacentCells
+
+
+    def updateCellStatus(self, cell):
+        print("Checking cells around cell",cell.x,cell.y)
         aliveCells = []
-        for adjacentCell in cellsToCheck:
+        for adjacentCell in self.returnAdjacentCellsAsList(cell):
             if adjacentCell.alive == True:
                 aliveCells.append(adjacentCell)
-        print(aliveCells)
         self.determineCellStatus(cell, aliveCells)
 
     def simulateStep(self):
@@ -90,10 +108,12 @@ class GamePlayer:
     def playGame(self):
         step = 0
         while step < self.maxSteps:
+            step = step + 1
+            print("Step",step)
             self.simulateStep()
-            for line in self.grid.grid:
-                for cell in line:
-                    print(cell.x,cell.y, cell.alive)
+            # for line in self.grid.grid:
+            #     for cell in line:
+            #         print(cell.x,cell.y, cell.alive)
         # for line in self.grid.grid:
         #     for cell in line:
         #         print(cell.x,cell.y, cell.alive)
