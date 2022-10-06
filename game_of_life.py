@@ -53,14 +53,8 @@ class GamePlayer:
     def __init__(self, gridSize, initialAliveCells, maxSteps):
         self.gridSize = gridSize
         self.grid = Grid(gridSize, initialAliveCells)
-        self.initialAliveCells = initialAliveCells
         self.maxSteps = maxSteps
-        self.currentLiveCells = []
-
-    def determineCellStatus(self, cell, aliveCells):
-        if 2 < len(aliveCells) <= 3:
-            cell.alive = True
-        else: cell.alive = False
+        self.aliveCells = []
 
     def returnAdjacentCellsAsList(self, cell):
         grid = self.grid.grid
@@ -68,7 +62,7 @@ class GamePlayer:
         x = cell.x
         y = cell.y
         adjacentCells = []
-        print("Cell x y:",x,y)
+        # print("Cell x y:",x,y)
         if x > 0 and y > 0:
             adjacentCells.append(grid[x-1][y-1]) 
         if x > 0:
@@ -85,19 +79,28 @@ class GamePlayer:
             adjacentCells.append(grid[x][y+1]) 
         if x < max and y < max:
             adjacentCells.append(grid[x+1][y+1]) 
-        print("Adjacent cells:")
-        for cell in adjacentCells:
-            print(cell.x,cell.y)
+        # print("Adjacent cells:")
+        # for cell in adjacentCells:
+        #     print(cell.x,cell.y,cell.alive)
         return adjacentCells
 
 
+    def killOrResurrectCell(self, cell, aliveCells):
+        print("Alive cells nearby:" + str(len(aliveCells)))
+        if cell.alive == True and 2 < len(aliveCells) <= 3:
+            cell.alive = True
+        else: cell.alive = False
+        if cell.alive == False and len(aliveCells) == 3:
+            cell.alive == True
+        
+
     def updateCellStatus(self, cell):
-        print("Checking cells around cell",cell.x,cell.y)
         aliveCells = []
         for adjacentCell in self.returnAdjacentCellsAsList(cell):
             if adjacentCell.alive == True:
                 aliveCells.append(adjacentCell)
-        self.determineCellStatus(cell, aliveCells)
+        self.killOrResurrectCell(cell, aliveCells)
+        
 
     def simulateStep(self):
         for row in self.grid.grid:
@@ -106,19 +109,22 @@ class GamePlayer:
 
 
     def playGame(self):
+        for line in self.grid.grid:
+            for cell in line:
+                print(cell.x,cell.y, cell.alive)
         step = 0
         while step < self.maxSteps:
             step = step + 1
             print("Step",step)
             self.simulateStep()
-            # for line in self.grid.grid:
-            #     for cell in line:
-            #         print(cell.x,cell.y, cell.alive)
+            for line in self.grid.grid:
+                for cell in line:
+                    print(cell.x,cell.y, cell.alive)
         # for line in self.grid.grid:
         #     for cell in line:
         #         print(cell.x,cell.y, cell.alive)
-        return self.currentLiveCells
+        return self.aliveCells
 
-userInput = [(0,1),(2,4),(6,5),(6,6),(9,2)]
-game = GamePlayer(10,userInput, 10)
+userInput = [(0,1),(0,0),(2,2),(0,2),(1,1),(2,1)]
+game = GamePlayer(3,userInput, 3)
 game.playGame()
