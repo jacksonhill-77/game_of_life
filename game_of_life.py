@@ -25,6 +25,9 @@ of the game.)
 You can get some inspiration for possible test cases here: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns
 '''
 
+from tkinter import N
+
+
 class Cell:
 
     def __init__(self, x, y):
@@ -39,9 +42,9 @@ class Grid:
         self.grid = []
         self.initialAliveCells = initialAliveCells
 
-        for x in range(gridSize):
+        for y in range(gridSize):
             cellList = []
-            for y in range(gridSize):
+            for x in range(gridSize):
                 cell = Cell(x, y)
                 if (x,y) in initialAliveCells:
                     cell.alive = True
@@ -56,29 +59,48 @@ class GamePlayer:
         self.maxSteps = maxSteps
         self.aliveCells = []
 
+    def printCurrentGridState(self):
+        for line in self.grid.grid:
+            lineOfCells = ""
+            for cell in line:
+                if cell.alive == True:
+                    lineOfCells += "O "
+                else:
+                    lineOfCells += "- "
+            print(lineOfCells)
+
     def returnAdjacentCellsAsList(self, cell):
         grid = self.grid.grid
         max = self.gridSize - 1
         x = cell.x
         y = cell.y
         adjacentCells = []
-        # print("Cell x y:",x,y)
+        adjacentCellsLocation = ""
         if x > 0 and y > 0:
-            adjacentCells.append(grid[x-1][y-1]) 
-        if x > 0:
-            adjacentCells.append(grid[x][y-1]) 
+            upperLeftCell = grid[y-1][x-1]
+            adjacentCells.append(upperLeftCell) 
+        if y > 0:
+            upperCentreCell = grid[y-1][x]
+            adjacentCells.append(upperCentreCell)
         if x < max and y > 0:
-            adjacentCells.append(grid[x+1][y-1]) 
+            upperRightCell = grid[x+1][y-1]
+            adjacentCells.append(upperRightCell)
         if x > 0:
-            adjacentCells.append(grid[x-1][y]) 
+            centreLeftCell = grid[x-1][y]
+            adjacentCells.append(centreLeftCell) 
         if x < max:
-            adjacentCells.append(grid[x+1][y]) 
+            centreRightCell = grid[x+1][y]
+            adjacentCells.append(centreRightCell) 
         if x > 0 and y < max:
-            adjacentCells.append(grid[x-1][y+1]) 
+            lowerLeftCell = grid[x-1][y+1]
+            adjacentCells.append(lowerLeftCell) 
         if y < max:
-            adjacentCells.append(grid[x][y+1]) 
+            lowerCentreCell = grid[x][y+1]
+            adjacentCells.append(lowerCentreCell) 
         if x < max and y < max:
-            adjacentCells.append(grid[x+1][y+1]) 
+            lowerRightCell = grid[x+1][y+1]
+            adjacentCells.append(lowerRightCell) 
+        # print(str(x) + " " + str(y) + '. Adjacent cells: ' + str(len(adjacentCells)) + ", " + adjacentCellsLocation)
         # print("Adjacent cells:")
         # for cell in adjacentCells:
         #     print(cell.x,cell.y,cell.alive)
@@ -86,12 +108,17 @@ class GamePlayer:
 
 
     def killOrResurrectCell(self, cell, aliveCells):
-        print("Alive cells nearby:" + str(len(aliveCells)))
-        if cell.alive == True and 2 < len(aliveCells) <= 3:
+        print("\nCurrent: " + str(cell.alive))
+        print('Alive cells: ' + str(len(aliveCells)))
+        if cell.alive == True and 2 <= len(aliveCells) <= 3:
             cell.alive = True
-        else: cell.alive = False
-        if cell.alive == False and len(aliveCells) == 3:
-            cell.alive == True
+            print('New: ' + str(cell.alive))
+        elif cell.alive == False and len(aliveCells) == 3:
+            cell.alive = True
+            print('New: ' + str(cell.alive))
+        else: 
+            cell.alive = False
+            print('New: ' + str(cell.alive))
         
 
     def updateCellStatus(self, cell):
@@ -109,22 +136,29 @@ class GamePlayer:
 
 
     def playGame(self):
+        print("Initial grid: ")
         for line in self.grid.grid:
+            lineOfCells = ""
             for cell in line:
-                print(cell.x,cell.y, cell.alive)
+                if cell.alive == True:
+                    lineOfCells += "O "
+                else:
+                    lineOfCells += "- "
+                # lineOfCells += "(" + str(cell.x) + " " + str(cell.y) + " " + str(cell.alive) + ")"
+            print(lineOfCells)
         step = 0
         while step < self.maxSteps:
             step = step + 1
-            print("Step",step)
+            print("STEP " + str(step))
             self.simulateStep()
-            for line in self.grid.grid:
-                for cell in line:
-                    print(cell.x,cell.y, cell.alive)
+            self.printCurrentGridState()
+                
         # for line in self.grid.grid:
         #     for cell in line:
         #         print(cell.x,cell.y, cell.alive)
         return self.aliveCells
 
-userInput = [(0,1),(0,0),(2,2),(0,2),(1,1),(2,1)]
-game = GamePlayer(3,userInput, 3)
+userInput = [(0,1),(0,0),(1,1),(0,2)]
+# userInput = [(0,1),(1,0),(0,0),(2,2),(0,2),(1,1),(2,1)]
+game = GamePlayer(4,userInput, 2)
 game.playGame()
