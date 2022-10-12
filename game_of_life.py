@@ -58,107 +58,126 @@ class GamePlayer:
         self.grid = Grid(gridSize, initialAliveCells)
         self.maxSteps = maxSteps
         self.aliveCells = []
+        self.currentStepGrid = []
 
     def printCurrentGridState(self):
-        for line in self.grid.grid:
+        for row in self.grid.grid:
             lineOfCells = ""
-            for cell in line:
+            for cell in row:
                 if cell.alive == True:
                     lineOfCells += "O "
                 else:
                     lineOfCells += "- "
             print(lineOfCells)
 
-    def returnAdjacentCellsAsList(self, cell):
-        grid = self.grid.grid
+    def printCellProperties(self, cell):
+        if cell.alive == False:
+            status = "Dead"
+        else: status = 'Alive'
+        print("x: " + str(cell.x) + " y: " + str(cell.y) + " " + status + "\n")
+
+    def returnAdjacentCellsAsList(self, cell, grid):
         max = self.gridSize - 1
         x = cell.x
         y = cell.y
         adjacentCells = []
-        adjacentCellsLocation = ""
+        print("\nCurrent cell: " + str(x) + " " + str(y) + " " + str(cell.alive))
         if x > 0 and y > 0:
             upperLeftCell = grid[y-1][x-1]
+            print("NW")
             adjacentCells.append(upperLeftCell) 
         if y > 0:
             upperCentreCell = grid[y-1][x]
+            print("N")
             adjacentCells.append(upperCentreCell)
         if x < max and y > 0:
-            upperRightCell = grid[x+1][y-1]
+            upperRightCell = grid[y-1][x+1]
+            print("NE")
             adjacentCells.append(upperRightCell)
         if x > 0:
-            centreLeftCell = grid[x-1][y]
+            centreLeftCell = grid[y][x-1]
+            print("W")
             adjacentCells.append(centreLeftCell) 
         if x < max:
-            centreRightCell = grid[x+1][y]
+            centreRightCell = grid[y][x+1]
+            print("E")
             adjacentCells.append(centreRightCell) 
         if x > 0 and y < max:
-            lowerLeftCell = grid[x-1][y+1]
+            lowerLeftCell = grid[y+1][x-1]
+            print("SW")
             adjacentCells.append(lowerLeftCell) 
         if y < max:
-            lowerCentreCell = grid[x][y+1]
+            lowerCentreCell = grid[y+1][x]
+            print("S")
             adjacentCells.append(lowerCentreCell) 
         if x < max and y < max:
-            lowerRightCell = grid[x+1][y+1]
+            lowerRightCell = grid[y+1][x+1]
+            print("SE")
             adjacentCells.append(lowerRightCell) 
-        # print(str(x) + " " + str(y) + '. Adjacent cells: ' + str(len(adjacentCells)) + ", " + adjacentCellsLocation)
-        # print("Adjacent cells:")
-        # for cell in adjacentCells:
-        #     print(cell.x,cell.y,cell.alive)
+        print("Adjacent cells:")
+        for cell in adjacentCells:
+            print(cell.x,cell.y,cell.alive)
         return adjacentCells
 
 
-    def killOrResurrectCell(self, cell, aliveCells):
-        print("\nCurrent: " + str(cell.alive))
-        print('Alive cells: ' + str(len(aliveCells)))
-        if cell.alive == True and 2 <= len(aliveCells) <= 3:
-            cell.alive = True
-            print('New: ' + str(cell.alive))
-        elif cell.alive == False and len(aliveCells) == 3:
-            cell.alive = True
-            print('New: ' + str(cell.alive))
+    def killOrResurrectCell(self, cell, aliveCellsCount):
+        print("Alive cells: " + str(aliveCellsCount))
+        newCell = Cell(cell.x,cell.y)
+        if cell.alive == True and 2 <= aliveCellsCount <= 3:
+            newCell.alive = True
+        elif cell.alive == False and aliveCellsCount == 3:
+            newCell.alive = True
         else: 
-            cell.alive = False
-            print('New: ' + str(cell.alive))
+            newCell.alive = False
+        print("Result: " + str(newCell.alive))
+        return newCell
         
 
-    def updateCellStatus(self, cell):
+    def updateCellStatus(self, cell, currentGrid):
         aliveCells = []
-        for adjacentCell in self.returnAdjacentCellsAsList(cell):
+        for adjacentCell in self.returnAdjacentCellsAsList(cell, currentGrid):
             if adjacentCell.alive == True:
                 aliveCells.append(adjacentCell)
-        self.killOrResurrectCell(cell, aliveCells)
+        # print("Current cell:")
+        # self.printCellProperties(cell)
+        # print("Current grid:")
+        # self.printCurrentGridState()
+        newCell = self.killOrResurrectCell(cell, len(aliveCells))
+        return newCell
         
 
-    def simulateStep(self):
+    def determineNewStatusOfCells(self):
+        cellsToInsert = []
         for row in self.grid.grid:
             for cell in row:
-                self.updateCellStatus(cell)
+                self.updateCellStatus(cell, self.grid.grid)
+                cellsToInsert.append(cell)
+        return cellsToInsert
 
+    def simulateStep(self):
+        cellsToInsert = self.determineNewStatusOfCells()
+        for i in cellsToInsert:
+            self.printCellProperties(i)
+        for row in self.grid.grid:
+            for existingCell in row:
+                for cell in cellsToInsert:
+                    if existingCell.x == cell.x and existingCell.y == cell.y:
+                        existingCell.alive = cell.alive
 
     def playGame(self):
         print("Initial grid: ")
-        for line in self.grid.grid:
-            lineOfCells = ""
-            for cell in line:
-                if cell.alive == True:
-                    lineOfCells += "O "
-                else:
-                    lineOfCells += "- "
-                # lineOfCells += "(" + str(cell.x) + " " + str(cell.y) + " " + str(cell.alive) + ")"
-            print(lineOfCells)
+        self.printCurrentGridState()
         step = 0
         while step < self.maxSteps:
             step = step + 1
             print("STEP " + str(step))
             self.simulateStep()
             self.printCurrentGridState()
-                
-        # for line in self.grid.grid:
-        #     for cell in line:
-        #         print(cell.x,cell.y, cell.alive)
+        print("Final grid state:")
+        self.printCurrentGridState()
         return self.aliveCells
 
-userInput = [(0,1),(0,0),(1,1),(0,2)]
+userInput = [(0,0),(0,1),(1,1),(0,2)]
 # userInput = [(0,1),(1,0),(0,0),(2,2),(0,2),(1,1),(2,1)]
-game = GamePlayer(4,userInput, 2)
+game = GamePlayer(4,userInput, 1)
 game.playGame()
