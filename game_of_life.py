@@ -61,9 +61,11 @@ class GamePlayer:
         self.currentStepGrid = []
 
     def printCurrentGridState(self):
+        cellCount = 0
         for row in self.grid.grid:
             lineOfCells = ""
             for cell in row:
+                cellCount += 1
                 if cell.alive == True:
                     lineOfCells += "O "
                 else:
@@ -133,9 +135,9 @@ class GamePlayer:
         return newCell
         
 
-    def updateCellStatus(self, cell, currentGrid):
+    def updateCellStatus(self, cell, grid):
         aliveCells = []
-        for adjacentCell in self.returnAdjacentCellsAsList(cell, currentGrid):
+        for adjacentCell in self.returnAdjacentCellsAsList(cell, grid):
             if adjacentCell.alive == True:
                 aliveCells.append(adjacentCell)
         # print("Current cell:")
@@ -148,21 +150,17 @@ class GamePlayer:
 
     def determineNewStatusOfCells(self):
         cellsToInsert = []
+        print("FINAL CELL PROPERTIES")
         for row in self.grid.grid:
             for cell in row:
+                self.printCellProperties
                 self.updateCellStatus(cell, self.grid.grid)
                 cellsToInsert.append(cell)
         return cellsToInsert
 
     def simulateStep(self):
         cellsToInsert = self.determineNewStatusOfCells()
-        for i in cellsToInsert:
-            self.printCellProperties(i)
-        for row in self.grid.grid:
-            for existingCell in row:
-                for cell in cellsToInsert:
-                    if existingCell.x == cell.x and existingCell.y == cell.y:
-                        existingCell.alive = cell.alive
+        print("Cells to insert:")
 
     def playGame(self):
         print("Initial grid: ")
