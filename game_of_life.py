@@ -43,12 +43,6 @@ class GamePlayer:
             print(lineOfCells)
         print()
 
-    def printCellProperties(self, cell):
-        if cell.alive == False:
-            status = "Dead"
-        else: status = 'Alive'
-        print("x: " + str(cell.x) + " y: " + str(cell.y) + " " + status + "\n")
-
     def returnAdjacentCellsAsList(self, cell, grid):
         max = self.gridSize - 1
         x = cell.x
