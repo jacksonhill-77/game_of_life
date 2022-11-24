@@ -1,8 +1,5 @@
 from game_of_life import GamePlayer, Cell, Grid
 
-# def cellParametersToTuple(cell):
-#     return (cell.x,cell.y,cell.alive)
-
 def testAdjacentCellsPickedCorrectly():
     userInput = [(0,0),(0,1),(1,1),(0,2)]
     cell = Cell(2,1)
