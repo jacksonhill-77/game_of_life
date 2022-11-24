@@ -41,7 +41,6 @@ class GamePlayer:
                 else:
                     lineOfCells += "- "
             print(lineOfCells)
-        print()
 
     def returnAdjacentCellsAsList(self, cell, grid):
         max = self.gridSize - 1
