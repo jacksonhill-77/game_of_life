@@ -28,10 +28,8 @@ class GamePlayer:
         for y in range(self.gridY):
             lineOfCells = ""
             for x in range(self.gridX):
-                if (x,y) in self.aliveCells:
-                    lineOfCells += "O "
-                else:
-                    lineOfCells += "- "
+                coordinate = (x,y)
+                
             print(lineOfCells)
 
     def getAdjacentLiveCoordinatesCount(self, coordinate):
@@ -62,12 +60,13 @@ class GamePlayer:
 
     def playGame(self):
         for step in range(self.maxSteps):
+            self.printCurrentGridState()
             self.simulateStep()
         return self.aliveCells
 
 initialLiveCells = [(1,1),(0,1),(2,1)]
 gridTopLeftCoordinate = [0,0]
 gridBottomRightCoordinate = [4,4]
-game = GamePlayer(initialLiveCells, 5)
+game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
 aliveCells = game.playGame()
 print(aliveCells)
