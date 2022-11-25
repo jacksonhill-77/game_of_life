@@ -13,39 +13,61 @@ class Coordinate:
 
 class GamePlayer:
 
-    def __init__(self, aliveCells, maxSteps):
-        self.aliveCells = aliveCells
+    def __init__(self, aliveCells, maxSteps, gridTopLeftCoordinate, gridX, gridY):
+        self.aliveCells = []
         self.maxSteps = maxSteps
+        self.gridX = gridX
+        self.gridY = gridY
 
-    def getAdjacentLiveCoordinates(self, coordinate):
-        print(len(coordinate.getAdjacentCoordinates))
-        return len(coordinate.getAdjacentCoordinates)
+        for cell in self.aliveCells:
+            coordinate = Coordinate(cell[0],cell[1])
+            self.aliveCells.append(coordinate)
+
+    def printCurrentGridState(self):
+        cellCount = 0
+        for y in range(self.gridY):
+            lineOfCells = ""
+            for x in range(self.gridX):
+                if (x,y) in self.aliveCells:
+                    lineOfCells += "O "
+                else:
+                    lineOfCells += "- "
+            print(lineOfCells)
+
+    def getAdjacentLiveCoordinatesCount(self, coordinate):
+        adjacentLiveCoordinates = []
+        adjacentCoordinates = coordinate.getAdjacentCoordinates()
+        for coordinate in adjacentCoordinates:
+            location = (coordinate.x, coordinate.y)
+            if location in self.aliveCells:
+                adjacentLiveCoordinates.append(location)
+        return len(adjacentLiveCoordinates)
 
     def nextGenerationIsAlive(self, coordinate):
-        liveNeighbourCount = self.getAdjacentLiveCoordinates(coordinate)
-        if self.isAlive(coordinate) == True and 2 <= liveNeighbourCount <= 3:
+        liveNeighbourCount = self.getAdjacentLiveCoordinatesCount(coordinate)
+        if 2 <= liveNeighbourCount <= 3:
             return True
-        elif self.isAlive(coordinate) == False and liveNeighbourCount == 3:
+        elif liveNeighbourCount == 3:
             return True
         else: 
             return False
-    
 
     def simulateStep(self):
         nextGenerationOfAliveCells = []
         for cell in self.aliveCells:
-            coordinatesWeNeedToLookAt = self.getAdjacentLiveCoordinates(self.aliveCells)
-            for coordinate in coordinatesWeNeedToLookAt:
-                if (self.nextGenerationIsAlive(coordinate)):
-                    nextGenerationOfAliveCells.append(coordinate)
+            if self.nextGenerationIsAlive(cell):
+                nextGenerationOfAliveCells.append(cell)
         self.aliveCells = nextGenerationOfAliveCells
-            
+
 
     def playGame(self):
         for step in range(self.maxSteps):
             self.simulateStep()
         return self.aliveCells
 
-userInput = [(1,1),(0,1),(2,1)]
-game = GamePlayer(userInput, 5)
-game.playGame()
+initialLiveCells = [(1,1),(0,1),(2,1)]
+gridTopLeftCoordinate = [0,0]
+gridBottomRightCoordinate = [4,4]
+game = GamePlayer(initialLiveCells, 5)
+aliveCells = game.playGame()
+print(aliveCells)
