@@ -8,7 +8,7 @@ class GamePlayer:
         self.gridX = gridX
         self.gridY = gridY
 
-        for cell in self.aliveCells:
+        for cell in aliveCells:
             coordinate = Coordinate(cell[0],cell[1])
             self.aliveCells.append(coordinate)
 
@@ -20,12 +20,17 @@ class GamePlayer:
                 coordinate = (x,y)
             print(lineOfCells)
 
+    def printCurrentAliveCells(self):
+        for cell in self.aliveCells:
+            print(cell.x,cell.y)
+
     def getAdjacentLiveCoordinatesCount(self, coordinate):
         adjacentLiveCoordinates = []
         adjacentCoordinates = coordinate.getAdjacentCoordinates()
         for coordinate in adjacentCoordinates:
             for cell in self.aliveCells:
                 if coordinate == cell:
+                    adjacentLiveCoordinates.append(coordinate)
             if coordinate in self.aliveCells:
                 adjacentLiveCoordinates.append(coordinate)
         return len(adjacentLiveCoordinates)
@@ -42,10 +47,10 @@ class GamePlayer:
     def simulateStep(self):
         nextGenerationOfAliveCells = []
         for cell in self.aliveCells:
-            if self.nextGenerationIsAlive(cell):
+            if self.nextGenerationIsAlive(cell) == True:
                 nextGenerationOfAliveCells.append(cell)
         self.aliveCells = nextGenerationOfAliveCells
-
+        self.printCurrentAliveCells()
 
     def playGame(self):
         for step in range(self.maxSteps):
@@ -54,8 +59,6 @@ class GamePlayer:
         return self.aliveCells
 
 initialLiveCells = [(1,1),(0,1),(2,1)]
-gridTopLeftCoordinate = [0,0]
-gridBottomRightCoordinate = [4,4]
 game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
 aliveCells = game.playGame()
 print(aliveCells)

@@ -4,12 +4,12 @@ class Coordinate:
         self.y = y
 
     def getAdjacentCoordinates(self):
-        adjacentCoordinates = set()
+        adjacentCoordinates = []
         for y in range(self.y - 1, self.y + 2):
             for x in range (self.x - 1, self.x + 2):
                 if (x,y) == (self.x, self.y):
                     continue
-                adjacentCoordinates.add(Coordinate(x, y))
+                adjacentCoordinates.append(Coordinate(x, y))
         return adjacentCoordinates
 
     def __eq__(self, other):
