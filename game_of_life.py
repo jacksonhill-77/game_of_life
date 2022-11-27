@@ -24,9 +24,10 @@ class GamePlayer:
         adjacentLiveCoordinates = []
         adjacentCoordinates = coordinate.getAdjacentCoordinates()
         for coordinate in adjacentCoordinates:
-            location = (coordinate.x, coordinate.y)
-            if location in self.aliveCells:
-                adjacentLiveCoordinates.append(location)
+            for cell in self.aliveCells:
+                if coordinate == cell:
+            if coordinate in self.aliveCells:
+                adjacentLiveCoordinates.append(coordinate)
         return len(adjacentLiveCoordinates)
 
     def nextGenerationIsAlive(self, coordinate):
