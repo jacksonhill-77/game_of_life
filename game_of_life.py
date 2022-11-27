@@ -1,3 +1,5 @@
+from Coordinate import Coordinate
+
 class GamePlayer:
 
     def __init__(self, aliveCells, maxSteps, gridTopLeftCoordinate, gridX, gridY):
