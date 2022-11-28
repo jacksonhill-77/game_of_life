@@ -24,5 +24,16 @@ def testDoesCellSurvive():
         result = game.doesCellSurvive(cell)
         results.append(result)
     assert results == [False, True, False]
+
+def testGetAdjacentLiveCoordinates():
+    initialLiveCells = [(0,1),(1,1),(2,1)]
+    game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
+    cell = Coordinate(1,1)
+    adjacentLiveCoordinates = game.getAdjacentLiveCoordinates(cell)
+    cell1 = (adjacentLiveCoordinates[0].x,adjacentLiveCoordinates[0].y)
+    cell2 = (adjacentLiveCoordinates[1].x,adjacentLiveCoordinates[1].y)
+    assert cell1 == (0,1)
+    assert cell2 == (2,1)
+
     
         
