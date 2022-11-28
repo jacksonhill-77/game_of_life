@@ -20,45 +20,71 @@ class GamePlayer:
                 coordinate = (x,y)
             print(lineOfCells)
 
-    def printCurrentAliveCells(self):
-        for cell in self.aliveCells:
+    def printCoordinatesAsTuples(self, listOfCoordinates):
+        if len(listOfCoordinates) == 0:
+            print("No cells")
+        for cell in listOfCoordinates:
             print(cell.x,cell.y)
 
-    def getAdjacentLiveCoordinatesCount(self, coordinate):
+    def getAdjacentLiveCoordinates(self, coordinate):
         adjacentLiveCoordinates = []
         adjacentCoordinates = coordinate.getAdjacentCoordinates()
         for coordinate in adjacentCoordinates:
             for cell in self.aliveCells:
                 if coordinate == cell:
                     adjacentLiveCoordinates.append(coordinate)
-            if coordinate in self.aliveCells:
-                adjacentLiveCoordinates.append(coordinate)
-        return len(adjacentLiveCoordinates)
+        return adjacentLiveCoordinates
 
-    def nextGenerationIsAlive(self, coordinate):
-        liveNeighbourCount = self.getAdjacentLiveCoordinatesCount(coordinate)
+    def doesCellSurvive(self, cell):
+        liveNeighbours = self.getAdjacentLiveCoordinates(cell)
+        liveNeighbourCount = len(liveNeighbours)
         if 2 <= liveNeighbourCount <= 3:
-            return True
-        elif liveNeighbourCount == 3:
+            print("Alive")
             return True
         else: 
+            print("Dead")
             return False
 
-    def simulateStep(self):
-        nextGenerationOfAliveCells = []
+    def determineIfEachCellSurvives(self, cellsWeNeedToLookAt):
+        print("Input cells")
+        print(len(cellsWeNeedToLookAt))
+        cellsThatSurvive = []
+        print("Cells we're looking at")
+        for cell in cellsWeNeedToLookAt:
+            print(cell.x,cell.y)
+        for cell in cellsWeNeedToLookAt:
+            if self.doesCellSurvive(cell) == True:
+                cellsThatSurvive.append(cell)
+        print("Cells that survive:")
+        print(len(cellsThatSurvive))
+        return cellsThatSurvive
+
+    def findAllCellsToLookAt(self):
+        cellsWeNeedToLookAt = []
         for cell in self.aliveCells:
-            if self.nextGenerationIsAlive(cell) == True:
-                nextGenerationOfAliveCells.append(cell)
-        self.aliveCells = nextGenerationOfAliveCells
-        self.printCurrentAliveCells()
+            if cell not in cellsWeNeedToLookAt:
+                cellsWeNeedToLookAt.append(cell)
+            for adjacentCoordinate in cell.getAdjacentCoordinates():
+                if adjacentCoordinate not in cellsWeNeedToLookAt:
+                    cellsWeNeedToLookAt.append(adjacentCoordinate)
+        return cellsWeNeedToLookAt
+
+    def simulateStep(self):
+        self.printCoordinatesAsTuples(self.aliveCells)
+        cellsWeNeedToLookAt = self.findAllCellsToLookAt()
+        print("Length of cells")
+        print(len(cellsWeNeedToLookAt))
+        nextGenerationAliveCells = self.determineIfEachCellSurvives(cellsWeNeedToLookAt)
+        self.aliveCells = nextGenerationAliveCells
+        print("Length of alive cells")
+        print(len(self.aliveCells))
 
     def playGame(self):
         for step in range(self.maxSteps):
-            self.printCurrentGridState()
+            print("\nStep " + str(step))
             self.simulateStep()
         return self.aliveCells
 
 initialLiveCells = [(1,1),(0,1),(2,1)]
-game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
-aliveCells = game.playGame()
-print(aliveCells)
+game = GamePlayer(initialLiveCells, 2, [0,0], 5,5)
+output = game.playGame()

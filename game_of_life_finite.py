@@ -121,4 +121,5 @@ class GamePlayer:
 
 userInput = [(1,1),(0,1),(2,1)]
 game = GamePlayer(4,userInput, 5)
-game.playGame()
+result = game.playGame()
+print(result)
