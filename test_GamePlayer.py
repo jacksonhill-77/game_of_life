@@ -15,7 +15,7 @@ def testInitialisationWorks():
 #         assert cell in 
 #     assert
 
-def testDoesCellSurvive():
+def testAliveCellsLiveOrDieCorrectly():
     initialLiveCells = [(0,1),(1,1),(2,1)]
     game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
     results = []
@@ -24,6 +24,14 @@ def testDoesCellSurvive():
         result = game.doesCellSurvive(cell)
         results.append(result)
     assert results == [False, True, False]
+
+def testDeadCellsLiveOrDieCorrectly():
+    initialLiveCells = [(0,1),(1,1),(2,1)]
+    game = GamePlayer(initialLiveCells, 1, [0,0], 5,5)
+    cell1 = Coordinate(0,0)
+    cell2 = Coordinate(1,0)
+    assert game.doesCellSurvive(cell1) == False
+    assert game.doesCellSurvive(cell2) == True
 
 def testGetAdjacentLiveCoordinates():
     initialLiveCells = [(0,1),(1,1),(2,1)]
