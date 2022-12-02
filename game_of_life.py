@@ -25,13 +25,6 @@ class GamePlayer:
                     lineOfCells += "- "
             print(lineOfCells)
 
-    def printCellsAsTuples(self, listOfCells):
-        if len(listOfCells) == 0:
-            print("No cells")
-        else: 
-            for cell in listOfCells:
-                print(cell.x,cell.y)
-
     def getAdjacentLiveCells(self, cell):
         adjacentLiveCells = []
         adjacentCells = cell.getAdjacentCells()
