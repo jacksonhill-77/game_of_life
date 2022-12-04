@@ -56,6 +56,7 @@ def testOutcomeIsCorrect():
     initialLiveCells = [(0,1),(1,1),(2,1)]
     game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
     result = game.playGame()
+    assert result == [(1,1),(0,1)(2,1)]
 
 # def testOutcomeIsCorrectIfOriginIsNegative():
 

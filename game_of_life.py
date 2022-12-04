@@ -72,12 +72,20 @@ class GamePlayer:
         return cellTuples
 
     def playGame(self):
+        print("Starting grid")
         for step in range(self.maxSteps):
             self.printCurrentGridState()
             print("\nStep " + str(step))
             self.simulateStep()
         return self.convertListOfCellsToTuples()
 
+    def __str__(self):
+        finalAliveCells = self.playGame()
+        finalCellsAsString = ""
+        for cell in finalAliveCells:
+            finalCellsAsString += str(cell)
+        return finalCellsAsString
+
 initialLiveCells = [(1,1),(0,1),(2,1)]
 game = GamePlayer(initialLiveCells, 2, [0,0], 5,5)
-output = game.playGame()
+print(game)
