@@ -51,20 +51,11 @@ def testFindAllCellsToLookAt():
     for cell in sampleCells: 
         assert cell in cellsWeNeedToLookAt
     assert len(cellsWeNeedToLookAt) == 15
-   
 
-# def findAllCellsToLookAt(self):
-#     cellsWeNeedToLookAt = []
-#     for cell in self.aliveCells:
-#         if cell not in cellsWeNeedToLookAt:
-#             cellsWeNeedToLookAt.append(cell)
-#         for adjacentCell in cell.getAdjacentCells():
-#             if adjacentCell not in cellsWeNeedToLookAt:
-#                 cellsWeNeedToLookAt.append(adjacentCell)
-#     return cellsWeNeedToLookAt
-
-# def testOutcomeIsCorrect():
-
+def testOutcomeIsCorrect():
+    initialLiveCells = [(0,1),(1,1),(2,1)]
+    game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
+    result = game.playGame()
 
 # def testOutcomeIsCorrectIfOriginIsNegative():
 
