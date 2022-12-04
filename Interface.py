@@ -22,4 +22,3 @@ class Interface:
         game = GamePlayer(self.initialLiveCells,self.maxSteps,self.gridOrigin,self.gridX,self.gridY)
         print(game)
 
-

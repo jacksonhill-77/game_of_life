@@ -85,7 +85,3 @@ class GamePlayer:
         for cell in finalAliveCells:
             finalCellsAsString += str(cell)
         return finalCellsAsString
-
-initialLiveCells = [(1,1),(0,1),(2,1)]
-game = GamePlayer(initialLiveCells, 2, [0,0], 5,5)
-print(game)
