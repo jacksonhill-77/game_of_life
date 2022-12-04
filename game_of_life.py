@@ -31,7 +31,7 @@ class GamePlayer:
         for adjacentCell in adjacentCells:
             for aliveCell in self.aliveCells:
                 if adjacentCell == aliveCell:
-                    adjacentLiveCells.append(cell)
+                    adjacentLiveCells.append(adjacentCell)
         return adjacentLiveCells
 
     def doesCellSurvive(self, cell):
