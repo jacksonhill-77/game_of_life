@@ -59,7 +59,12 @@ def testOutcomeIsCorrect():
     for cell in result:
         assert cell in [(1,1),(1,0),(1,2)]
 
-# def testOutcomeIsCorrectIfOriginIsNegative():
+def testOutcomeIsCorrectIfCellsAreNegative():
+    initialLiveCells = [(-2,-1),(-2,-2),(-2,-3)]
+    game = GamePlayer(initialLiveCells, 5, [-3,-3], 5,5)
+    result = game.playGame()
+    for cell in result:
+        assert cell in [(-1,-2),(-2,-2),(-3,-2)]
 
 
     
