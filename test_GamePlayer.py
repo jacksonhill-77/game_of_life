@@ -43,25 +43,25 @@ def testDetermineIfEachCellLivesOrDies():
     cellsThatSurvive = game.determineIfEachCellSurvives(cellsWeNeedToLookAt)
     assert cellsThatSurvive == [Cell(1,1)]
 
+def testFindAllCellsToLookAt():
+    initialLiveCells = [(0,1),(1,1),(2,1)]
+    game = GamePlayer(initialLiveCells, 5, [0,0], 5,5)
+    cellsWeNeedToLookAt = game.findAllCellsToLookAt()
+    sampleCells = [Cell(0,1),Cell(3,2),Cell(0,2)]
+    for cell in sampleCells: 
+        assert cell in cellsWeNeedToLookAt
+    assert len(cellsWeNeedToLookAt) == 15
+   
 
-#    def determineIfEachCellSurvives(self, cellsWeNeedToLookAt):
-    # cellsThatSurvive = []
-    # for cell in cellsWeNeedToLookAt:
-    #     if self.doesCellSurvive(cell) == True:
-    #         cellsThatSurvive.append(cell)
-    # return cellsThatSurvive
-
-# def testFindAllCellsToLookAt():
-
-# # def findAllCellsToLookAt(self):
-# #     cellsWeNeedToLookAt = []
-# #     for cell in self.aliveCells:
-# #         if cell not in cellsWeNeedToLookAt:
-# #             cellsWeNeedToLookAt.append(cell)
-# #         for adjacentCell in cell.getAdjacentCells():
-# #             if adjacentCell not in cellsWeNeedToLookAt:
-# #                 cellsWeNeedToLookAt.append(adjacentCell)
-# #     return cellsWeNeedToLookAt
+# def findAllCellsToLookAt(self):
+#     cellsWeNeedToLookAt = []
+#     for cell in self.aliveCells:
+#         if cell not in cellsWeNeedToLookAt:
+#             cellsWeNeedToLookAt.append(cell)
+#         for adjacentCell in cell.getAdjacentCells():
+#             if adjacentCell not in cellsWeNeedToLookAt:
+#                 cellsWeNeedToLookAt.append(adjacentCell)
+#     return cellsWeNeedToLookAt
 
 # def testOutcomeIsCorrect():
 
