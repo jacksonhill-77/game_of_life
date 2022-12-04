@@ -1,4 +1,4 @@
-from game_of_life import GamePlayer
+from GamePlayer import GamePlayer
 from Cell import Cell
 
 def testInitialisationWorks():
