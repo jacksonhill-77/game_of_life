@@ -1,17 +1,20 @@
 TASK DESCRIPTION (CONCISE)
 
-Recreate Conway's game of life on an infinite grid while optimising it for sparse finite life
+Recreate Conway's game of life on an infinite grid while optimising it for sparse finite life (see bottom of page for full description).
+
 
 REQUIREMENTS
 
 - Python 3 
 - pytest 
 
+
 TO START
 
 1. Navigate to project folder in terminal 
-2. With python 3 installed, enter "python main.py" to run the main file
-3. Interaction with the script is done through the terminal. Enter the input parameters manually, or simply press enter to use the default
+2. With python 3 installed, enter "python main.py" in your command line interface to run the main file
+3. Interaction with the script is done through the command line interface. Enter the input parameters manually, or simply press enter to use the default
+
 
 TO TEST 
 
@@ -25,13 +28,19 @@ ASSUMPTIONS
 - No initial cells will share coordinates
 - The grid cells can comprise negative numbers
 - The output should be a list of tuples
-- There will always be initial alive cells input
+- There will always be at least one initial alive cell input
+
 
 DESIGN CHOICES
 
 1. The Cell class could have been implemented as a tuple. However, it is implemented as a class to enable future behaviour to be attached to it. e.g. if we wanted to give it a random chance of survival or create sub-classes of cells, this is easier if it is a class.
-2. One option could have been to generate an entire grid, populating it with the original alive cells, and then looping over the whole grid to find the alive cells for each step. However, the approach I used optimised the game for sparse finite life by only searching for the cells which could become live on the next step. These are the current live cells and all 8 adjacent cells for each original live cell.
-3. 
+
+2. One option could have been to generate an entire grid, populating it with the original alive cells, and then looping over the whole grid to find the alive cells for each step, where the time complexity is O(A*B) for the x * y dimensions of the grid.
+
+However, the approach I used optimised the game for sparse finite life by only searching for the cells which could become live on the next step. These are the current live cells and all 8 adjacent cells for each original live cell. The time complexity here would simply be O(A).
+
+3. The getAdjacentCells function is put in the Cell class, keeping the GamePlayer class cleaner but also putting it in a place that thematically makes sense.
+
 
 TASK DESCRIPTION (FULL)
 
